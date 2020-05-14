@@ -11,6 +11,8 @@ router.get("/", (req, res) => {
 });
 
 router.get("/shouts", (req, res, next) => {
+  const motd = process.env.MOTD || "hello world!";
+
   Shouts.find()
     .then(shouts => {
       res.status(200).json(shouts);
