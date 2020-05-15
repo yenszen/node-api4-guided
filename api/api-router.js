@@ -10,14 +10,21 @@ router.get("/", (req, res) => {
   res.status(200).json({ api: "up" });
 });
 
-router.get("/shouts", (req, res, next) => {
-  const motd = process.env.MOTD || "hello world!";
+router.get("/shouts", async (req, res, next) => {
+  try {
+    const messageOfTheDay = process.env.MOTD || "Hello World!";
+    const shouts = await Shouts.find();
+    res.status(200).json({ message: messageOfTheDay, shouts });
+  } catch (err) {
+    next(err);
+  }
 
-  Shouts.find()
-    .then(shouts => {
-      res.status(200).json(shouts);
-    })
-    .catch(error => next(error));
+  // Shouts.find()
+  //   .then(shouts => {
+  //     const messageOfTheDay = process.env.MOTD || "Hello World!";
+  //     res.status(200).json({ message: messageOfTheDay, shouts });
+  //   })
+  //   .catch(error => next(error));
 });
 
 router.post("/shouts", (req, res, next) => {
